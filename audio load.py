@@ -4,6 +4,7 @@ import translate
 
 from pydub import AudioSegment
 
+
 FORMAT = pyaudio.paInt16
 CHANNELS = 1
 RATE = 44100
@@ -51,11 +52,11 @@ def show_menu():
         print("3. Quitter")
         
         choice = input("Choisissez une option : ")
-
+        filename = "audio.mp3"
         if choice == '1':
             # filename = input("Entrez le nom du fichier de sortie (par défaut 'output.wav'): ")
             # if not filename:
-            filename = "audio.mp3"
+            
             start_recording(output_filename=filename)
         elif choice == '2':
             translate.translateAudio(filename)

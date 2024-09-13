@@ -1,6 +1,10 @@
 import whisper
+import torch
+import torch.nn as nn
 
 model = whisper.load_model("large")
+# model = whisper.load_model("medium")
+
 # model = whisper.load_model("base")
 
 def translateAudio(audioFile):
@@ -15,11 +19,30 @@ def translateAudio(audioFile):
 
 
     mel = whisper.log_mel_spectrogram(audio).to(model.device)
+    
+    # print(mel.shape)
+
+    # Créer une convolution 1x1 pour ajuster le nombre de canaux
+    conv1x1 = nn.Conv1d(in_channels=80, out_channels=128, kernel_size=1)
+
+    mel = conv1x1(mel)
+    # print(mel.shape)
+    # if mel.dim() == 2:  # si le tenseur est 2D (n_mels, frames)
+    #     mel = mel.unsqueeze(0)  # le rendre 3D (1, n_mels, frames)
     _, probs = model.detect_language(mel)
     print(f"Detected language: {max(probs, key=probs.get)}")
 
-    options = whisper.DecodingOptions()
+    # options = whisper.DecodingOptions()²
+    options = {
+    "language": "fr",               # Forcer la langue en français
+    "temperature": 0.5,             # Température pour ajuster la créativité de la transcription
+    "best_of": 3,                   # Générer plusieurs transcriptions et garder la meilleure
+    "beam_size": 5,                 # Utiliser un plus grand nombre de faisceaux pour la recherche (améliore la qualité)
+    "verbose": True,                # Activer les logs détaillés pour le débogage
+    "fp16": False,                  # Désactiver la précision flottante 16 bits (utile pour les machines sans GPU)
+    }
 
+    # result = model.transcribe(audio, language="fr")
     result = whisper.decode(model, mel, options)
 
     # print the recognized text
