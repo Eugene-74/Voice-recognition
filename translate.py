@@ -1,6 +1,7 @@
 import whisper
 # import torch
 import torch.nn as nn
+import time
 
 model = whisper.load_model("large")
 # model = whisper.load_model("medium")
@@ -8,11 +9,17 @@ model = whisper.load_model("large")
 # model = whisper.load_model("base")
 
 def translateAudio(audioFile):
+    # get the time
+    start = time.time()
 
     audio = whisper.load_audio(audioFile)
     audio = whisper.pad_or_trim(audio)
 
+<<<<<<< HEAD
     result = model.transcribe(audioFile)
+=======
+    result = model.transcribe(audioFile, language="fr", temperature=0.5, best_of=3, beam_size=5, verbose=True, fp16=False)
+>>>>>>> b107da55edd4465c249b07ff3cebb79524d7323b
     # print("\n\n")
     # print(result["text"])
     # print("\n\n")
@@ -20,9 +27,13 @@ def translateAudio(audioFile):
 
     # mel = whisper.log_mel_spectrogram(audio).to(model.device)
     
-    # print(mel.shape)
+    # # print(mel.shape)
 
+<<<<<<< HEAD
     # Créer une convolution 1x1 pour ajuster le nombre de canaux
+=======
+    # # Créer une convolution 1x1 pour ajuster le nombre de canaux
+>>>>>>> b107da55edd4465c249b07ff3cebb79524d7323b
     # conv1x1 = nn.Conv1d(in_channels=80, out_channels=128, kernel_size=1)
 
     # mel = conv1x1(mel)
@@ -32,7 +43,11 @@ def translateAudio(audioFile):
     # _, probs = model.detect_language(mel)
     # print(f"Detected language: {max(probs, key=probs.get)}")
 
+<<<<<<< HEAD
     # options = whisper.DecodingOptions()²
+=======
+    # options = whisper.DecodingOptions()
+>>>>>>> b107da55edd4465c249b07ff3cebb79524d7323b
     # options = {
     # "language": "fr",               # Forcer la langue en français
     # "temperature": 0.5,             # Température pour ajuster la créativité de la transcription
@@ -46,6 +61,12 @@ def translateAudio(audioFile):
     # result = whisper.decode(model, mel, options)
 
     # print the recognized text
+<<<<<<< HEAD
+=======
+    # Print the time
+    end = time.time()
+    print(f"Time: {end - start}")
+>>>>>>> b107da55edd4465c249b07ff3cebb79524d7323b
     return result["text"]
 
 
